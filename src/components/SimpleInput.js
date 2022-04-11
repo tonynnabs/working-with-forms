@@ -11,10 +11,20 @@ const SimpleInput = (props) => {
     onBlur: inputOnBlurHandler,
     reset: resetNameInput,
   } = useInput(validateNameInput);
-  
+
+  const validateEmailInput = (value) => {return value.includes('@')}
+  const {
+    value: enteredEmail,
+    isValid: enteredEmailIsValid,
+    hasError: emailInputIsInvalid,
+    onChange: emailInputChangeHandler,
+    onBlur: emailInputOnBlurHandler,
+    reset: resetEmailInput,
+  } = useInput(validateEmailInput);
+
   //-------- Overall form validity, can also use useEffects------
   let formIsValid = false;
-  if (enteredNameIsValid) {
+  if (enteredNameIsValid && enteredEmailIsValid) {
     formIsValid = true;
   }
 
@@ -24,8 +34,9 @@ const SimpleInput = (props) => {
     if (!enteredNameIsValid) {
       return;
     }
-    console.log(enteredName);
+    console.log(enteredName, enteredEmail);
     resetNameInput();
+    resetEmailInput();
   };
 
   const formClasses = nameInputIsInvalid
@@ -44,6 +55,19 @@ const SimpleInput = (props) => {
         />
         {nameInputIsInvalid && (
           <p className="error-text">Name must not be empty</p>
+        )}
+      </div>
+      <div className={`form-control ${emailInputIsInvalid && 'invalid'}`}>
+        <label htmlFor="email">Your Email Address {enteredEmail}</label>
+        <input
+          onChange={emailInputChangeHandler}
+          onBlur={emailInputOnBlurHandler}
+          value={enteredEmail}
+          type="email"
+          id="email"
+        />
+        {emailInputIsInvalid && (
+          <p className="error-text">Email must not be empty or invalid</p>
         )}
       </div>
       <div className="form-actions">

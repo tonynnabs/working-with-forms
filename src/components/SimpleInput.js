@@ -3,9 +3,14 @@ import React, { useState } from "react";
 const SimpleInput = (props) => {
   const [enteredName, setEnteredName] = useState("");
   const [enteredNameTouched, setEnteredNameTouched] = useState(false);
-
   const enteredNameIsValid = enteredName.trim() !== '';
-  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched
+  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
+
+  //-------- Overall form validity, can also use useEffects------
+  let formIsValid = false;
+  if(enteredNameIsValid){
+    formIsValid = true;
+  }
   //--- Using on Change---------
   const nameInputChangeHandler = (e) => {
     setEnteredName(e.target.value);
@@ -47,7 +52,7 @@ const SimpleInput = (props) => {
         )}
       </div>
       <div className="form-actions">
-        <button>Submit</button>
+        <button disabled={!formIsValid}>Submit</button>
       </div>
     </form>
   );

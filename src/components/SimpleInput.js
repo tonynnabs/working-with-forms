@@ -1,37 +1,32 @@
-import React, { useState } from "react";
+import React from "react";
+import useInput from "./../hooks/use-input";
 
 const SimpleInput = (props) => {
-  const [enteredName, setEnteredName] = useState("");
-  const [enteredNameTouched, setEnteredNameTouched] = useState(false);
-  const enteredNameIsValid = enteredName.trim() !== '';
-  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
-
+  const validateNameInput = (value) => {return value.trim() !== ""}
+  const {
+    value: enteredName,
+    isValid: enteredNameIsValid,
+    hasError: nameInputIsInvalid,
+    onChange: nameInputChangeHandler,
+    onBlur: inputOnBlurHandler,
+    reset: resetNameInput,
+  } = useInput(validateNameInput);
+  
   //-------- Overall form validity, can also use useEffects------
   let formIsValid = false;
-  if(enteredNameIsValid){
+  if (enteredNameIsValid) {
     formIsValid = true;
   }
-  //--- Using on Change---------
-  const nameInputChangeHandler = (e) => {
-    setEnteredName(e.target.value);
-  };
 
-  //----on Blur-----
-  const inputOnBlurHandler = () => {
-    setEnteredNameTouched(true);
-  }
   //----Using on Submit-----------
   const formSubmitHandler = (e) => {
     e.preventDefault();
-    setEnteredNameTouched(true);
     if (!enteredNameIsValid) {
       return;
     }
     console.log(enteredName);
-    setEnteredName('');
-    setEnteredNameTouched(false);
+    resetNameInput();
   };
-
 
   const formClasses = nameInputIsInvalid
     ? "form-control invalid"
